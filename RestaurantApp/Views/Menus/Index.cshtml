@@ -1,0 +1,83 @@
+﻿@model IEnumerable<RestaurantApp.Models.Menu>
+
+@{
+    ViewBag.Title = "Menu";
+}
+
+<h2 class="text-center">Меню</h2>
+@if (User.IsInRole("Повар"))
+{<p>
+    @Html.ActionLink("Добавить", "Create")
+</p>
+
+}
+    
+    @*<table class="table">*@
+<div class="container " style="border:2px solid black">
+    @foreach (var item in Model)
+    {
+        <div class="col-md-4">
+            <div style="text-align:center; border-bottom:2px solid maroon">
+                @Html.DisplayFor(modelItem => item.Name)
+            </div>
+            <div>
+                <div class="col-md-8">
+                    <img src="@Url.Content(item.Image)" height="170" width="170" />
+                </div>
+                <div class="panel-default" style="text-align:left">
+                    @Html.DisplayFor(modelItem => item.Description)
+                </div>
+                <br />
+                <div class=" col-md-8" style="text-align:left">
+
+                    <a href="@Url.Action("OrderNow", "ShoppingCart", new { id = item.Id }, null)" class="btn btn-success">
+                        В корзину
+                        <span class="glyphicon glyphicon-shopping-cart" aria-hidden="true"></span>
+                    </a>
+                    <span>    </span> <span style="text-align:left; text-decoration:underline">@item.Price тг</span>
+                </div>
+                <br />
+                <div class="col-md-8" style="text-align:left">
+
+                </div>
+                <div class="col-md-8" style="text-align:right">
+                    @if (User.IsInRole("Повар"))
+                    {
+                        @Html.ActionLink("Изменить", "Edit", new { id = item.Id })
+                        @Html.ActionLink("Удалить", "Delete", new { id = item.Id })
+
+                    }
+                </div>
+                <br />
+                <br />
+                <br />
+            </div>
+
+
+
+        </div>
+
+    }
+</div>
+
+
+@*<tr>
+        <td>
+            <img src="@Url.Content(item.Image)" height="120" width="120" />
+            @Html.DisplayFor(modelItem => item.Name)
+        </td>
+
+        <td>
+            @Html.DisplayFor(modelItem => item.Price)
+        </td>
+
+        <td>
+            @Html.ActionLink("Добавить в корзину", "OrderNow", "ShoppingCart", new { id = item.Id }, null)
+            @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
+            @Html.ActionLink("Details", "Details", new { id = item.Id }) |
+            @Html.ActionLink("Delete", "Delete", new { id = item.Id })
+        </td>
+    </tr>*@
+@*}*@
+
+@*</table>*@

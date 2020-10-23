@@ -1,0 +1,33 @@
+﻿@model RestaurantApp.Models.IndexViewModel
+@{
+    ViewBag.Title = "Управление";
+}
+
+
+<p class="text-success">@ViewBag.StatusMessage</p>
+<div>
+    <h4>Профиль</h4>
+    <hr />
+    <dl class="dl-horizontal">
+
+        <dt>
+            @Html.ActionLink("Заказы", "List", "Orders")
+
+        </dt>
+        <dd>
+        </dd>
+        <dt>Пароль:</dt>
+        <dd>
+            [
+            @if (Model.HasPassword)
+            {
+                @Html.ActionLink("Смена пароля", "ChangePassword")
+            }
+            else
+            {
+                @Html.ActionLink("Создать", "SetPassword")
+            }
+            ]
+        </dd>
+    </dl>
+</div>

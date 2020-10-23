@@ -1,0 +1,86 @@
+﻿@using RestaurantApp.Models;
+@{
+    ViewBag.Title = "CheckOut";
+}
+@Styles.Render("~/Content/css")
+<script src="~/Scripts/jquery-3.4.1.min.js"></script>
+<script src="~/Scripts/jquery.validate.min.js"></script>
+<body>
+    <h2>Заказать</h2>
+    @{
+        if (Session["Cart"] != null)
+        {
+            <table border="1" class="shopping-cart">
+                    <tr>
+                        <th>Имя</th>
+                        <th>Цена</th>
+                        <th>Количество</th>
+                        <th>Общее</th>
+                    </tr>
+                @foreach (var cart in (List<Cart>)Session["Cart"])
+                {
+                    <tr>
+                        <td>@cart.Menu.Name</td>
+                        <td>@(String.Format("{0:N0}", cart.Menu.Price))</td>
+                        <td>
+                            <input id="quantity" onkeypress="return isNumberKey(event)" type="text" name="quantity" value="@cart.Quantity" readonly />
+                            &nbsp; <span id="errmsg"></span>
+                        </td>
+                        <td>@(String.Format("{0:N0}", cart.Menu.Price * cart.Quantity))</td>
+
+                    </tr>
+                }
+                <tr>
+                    <td colspan="3">Общее:</td>
+                    <td>
+                        @{
+                            List<Cart> temp = (List<Cart>)Session["Cart"];
+                            var total = String.Format("{0:N0}", temp.Sum(x => x.Quantity * x.Menu.Price));
+                        }
+                        @total тг
+                    </td>
+                </tr>
+            </table>
+        }
+        else
+        {
+            <h4>Корзина пуста!!!</h4>
+        }
+    }
+    <br />
+    @using (Html.BeginForm("ProcessOrder", "ShoppingCart", FormMethod.Post, new { id = "customer-form" }))
+    {
+        <table>
+            <tr>
+                <td colspan="3" style="text-align:center;"> <b>Информация о заказчике</b></td>
+            </tr>
+            <tr>
+                <td>Ваше Имя</td>
+                <td><input type="text" name="Name" /></td>
+            </tr>
+            <tr>
+                <td colspan="3"><input type="submit" value="Заказать" class="btn btn-success" /></td>
+            </tr>
+        </table>
+    }
+    <script type="text/javascript">
+        $("#customer-form").validate({
+            rules: {
+                Name: {
+                    required: true
+                }
+            }
+        });
+    </script>
+</body>
+
+@*<script type="text/javascript">
+        $(document).ready(function () {
+            $("#quantity").keypress(function (e) {
+                if (e.which != 8 && e.which != 0 && (e.which < 48 || e.which > 57)) {
+                    $("#errmsg").html("Введите только числа!").show().fadeOut("slow");
+                    return false;
+                }
+            });
+        });
+    </script>*@

@@ -1,0 +1,103 @@
+﻿@model IEnumerable<RestaurantApp.Models.OrderDetail>
+
+@{
+    ViewBag.Title = "Index";
+
+
+    List<SelectListItem> AttedanceType = new List<SelectListItem>()
+{
+        
+        new SelectListItem(){Text = "Готово", Value = "Готово"},
+        new SelectListItem(){Text = "В процессе", Value = "В процессе"},
+        new SelectListItem(){Text = "Отклонено", Value = "Отклонено"}
+    };
+}
+
+<h2>Список заказов</h2>
+<h3>
+</h3>
+    <div class="form-group">
+     
+    </div>
+    <table class="table">
+        <tr>
+            <th hidden>
+                Id
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Menu.Name)
+            </th>
+            <th>
+                На имя
+            </th>
+            <th>
+                Цена
+            </th>
+            <th>
+                Количество
+            </th>
+            <th>
+                Время
+            </th>
+            <th>
+                Статус
+            </th>
+            <th>
+
+            </th>
+
+        </tr>
+
+
+
+        @foreach (var item in Model)
+        {
+    <tr>
+        <td hidden>
+            @Html.HiddenFor(modelItem => item.Id, new { @class = "idclass", @id = "ddlId" })
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Menu.Name)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Order.Name)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Price)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Quantity)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Order.OrderTime)
+        </td>
+        <td>
+            @Html.DropDownList("Status", new SelectList(AttedanceType, "Value", "Text",item.Status), new { @class = "form-control", @id = "ddlStatus" })
+        </td>
+        <td>
+            <input type="submit" value="Сохранить" class="btn btn-default"  onclick="ChangeStatus(this)" />
+        </td>
+    </tr>
+        }
+
+    </table>
+
+
+<script>
+
+    function ChangeStatus(ele) {
+        debugger;
+        var orderid = $(ele).parent('td').parent('tr').find("#ddlId").val(); 
+        var currentStatus = $(ele).parent('td').parent('tr').find("#ddlStatus").val(); 
+        $.ajax({
+            type: 'POST', 
+            url: '/OrderDetails/UpdateStatus',
+            data: {
+                'status': currentStatus,
+                'orderId': orderid
+            },
+            
+        })
+
+    }
+</script>
